@@ -25,25 +25,25 @@ public class CropListener implements Listener {
         // Bei unreifen Pflanzen: Falls der Spieler nicht sneak gedrückt hält, Abbau abbrechen
         if (currentAge < maxAge && !player.isSneaking()) {
             event.setCancelled(true);
-            player.sendMessage("§cDu musst sneak gedrückt halten, um unreife Pflanzen abzubauen!");
+            player.sendMessage("§cDu musst SNEAK gedrückt halten, um unreife Pflanzen abzubauen!");
             return;
         }
 
         // Für reife Pflanzen: Automatisches Wiederanpflanzen
-        if (currentAge >= maxAge) {
-            // Für non-OPs (und alle anderen) den Abbau durch das Plugin regeln
-            // Abbruch des normalen Abbauverhaltens
+        //if (currentAge >= maxAge) {
+        // Für non-OPs (und alle anderen) den Abbau durch das Plugin regeln
+        // Abbruch des normalen Abbauverhaltens
 
 
-            // Setze den Block auf den neu angepflanzten Zustand (Alter 0)
-            final Ageable newAgeable = ageable;
-            newAgeable.setAge(0);
-            block.setType(block.getType());
-            block.setBlockData(newAgeable);
+        // Setze den Block auf den neu angepflanzten Zustand (Alter 0)
+        //  final Ageable newAgeable = ageable;
+        //  newAgeable.setAge(0);
+        // block.setType(block.getType());
+        // block.setBlockData(newAgeable);
 
-            // Optional: Manuelle Treffer oder Drops, falls gewünscht
-            // Zum Beispiel könnte man hier dem Spieler ein Crop-Item geben.
-            player.sendMessage("§aPflanze abgebaut und wieder angepflanzt!");
-        }
+        // Optional: Manuelle Treffer oder Drops, falls gewünscht
+        // Zum Beispiel könnte man hier dem Spieler ein Crop-Item geben.
+        // player.sendMessage("§aPflanze abgebaut und wieder angepflanzt!");
+        //  }
     }
 }
