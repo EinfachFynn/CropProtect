@@ -1,20 +1,31 @@
 package de.netzguru0815.cropprotect;
 
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CropListener implements Listener {
+
+    private final Set<Player> messageCooldown = new HashSet<>();
 
 
     @EventHandler
     public void onBlockBreak(final BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
+
+        // Liste der erlaubten Crop-Materialien
+        final Material blockType = block.getType();
+        if (!this.isAllowedCrop(blockType)) return;
 
         // Nur weiter verarbeiten, falls der Block Daten hat, die alterbar sind (z.B. Crop)
         if (!(block.getBlockData() instanceof final Ageable ageable)) return;
@@ -25,25 +36,32 @@ public class CropListener implements Listener {
         // Bei unreifen Pflanzen: Falls der Spieler nicht sneak gedrückt hält, Abbau abbrechen
         if (currentAge < maxAge && !player.isSneaking()) {
             event.setCancelled(true);
-            player.sendMessage("§cDu musst SNEAK gedrückt halten, um unreife Pflanzen abzubauen!");
-            return;
+
+
+            if (!this.messageCooldown.contains(player)) {
+                this.messageCooldown.add(player);
+                player.sendMessage("§cDu musst SNEAK gedrückt halten, um unreife Pflanzen abzubauen!");
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        CropListener.this.messageCooldown.remove(player);
+                    }
+                }.runTaskLater(CropProtect.getPlugin(CropProtect.class), 100L); // 100 ticks = 5 seconds
+            }
         }
+    }
 
-        // Für reife Pflanzen: Automatisches Wiederanpflanzen
-        //if (currentAge >= maxAge) {
-        // Für non-OPs (und alle anderen) den Abbau durch das Plugin regeln
-        // Abbruch des normalen Abbauverhaltens
+    /**
+     * Überprüft, ob der gegebene Materialtyp ein erlaubter Crop ist.
+     *
+     * @param material Der zu überprüfende Materialtyp.
+     * @return true, wenn es sich um einen erlaubten Crop handelt, sonst false.
+     */
 
-
-        // Setze den Block auf den neu angepflanzten Zustand (Alter 0)
-        //  final Ageable newAgeable = ageable;
-        //  newAgeable.setAge(0);
-        // block.setType(block.getType());
-        // block.setBlockData(newAgeable);
-
-        // Optional: Manuelle Treffer oder Drops, falls gewünscht
-        // Zum Beispiel könnte man hier dem Spieler ein Crop-Item geben.
-        // player.sendMessage("§aPflanze abgebaut und wieder angepflanzt!");
-        //  }
+    private boolean isAllowedCrop(final Material material) {
+        return switch (material) {
+            case WHEAT, CARROTS, POTATOES, BEETROOTS, NETHER_WART, COCOA, SWEET_BERRY_BUSH -> true;
+            default -> false;
+        };
     }
 }
