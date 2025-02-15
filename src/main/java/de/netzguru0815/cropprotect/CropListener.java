@@ -27,7 +27,7 @@ public class CropListener implements Listener {
         final Material blockType = block.getType();
         if (!this.isAllowedCrop(blockType)) return;
 
-        // Nur weiter verarbeiten, falls der Block Daten hat, die alterbar sind (z.B. Crop)
+        // Nur weiter verarbeiten, falls der Block Daten hat, die alter bar sind (z.B. Crop)
         if (!(block.getBlockData() instanceof final Ageable ageable)) return;
 
         final int currentAge = ageable.getAge();

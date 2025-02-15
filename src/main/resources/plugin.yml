@@ -1,4 +1,5 @@
 name: CropProtect
-version: 1.0
+author: netzguru0815
+version: 1.3
 main: de.netzguru0815.cropprotect.CropProtect
 api-version: 1.21
