@@ -34,7 +34,7 @@ public class CropListener implements Listener {
         final int maxAge = ageable.getMaximumAge();
 
         // Bei unreifen Pflanzen: Falls der Spieler nicht sneak gedrückt hält, Abbau abbrechen
-        if (currentAge < maxAge && !player.isSneaking()) {
+        if (currentAge < maxAge && !player.isSneaking() && !player.getGameMode().equals(org.bukkit.GameMode.CREATIVE)) {
             event.setCancelled(true);
 
 
