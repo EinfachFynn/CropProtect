@@ -38,8 +38,7 @@ public class CropListener implements Listener {
             event.setCancelled(true);
 
 
-            if (!this.messageCooldown.contains(player)) {
-                this.messageCooldown.add(player);
+            if (this.messageCooldown.add(player)) {
                 player.sendMessage("§cDu musst SNEAK gedrückt halten, um unreife Pflanzen abzubauen!");
                 new BukkitRunnable() {
                     @Override
@@ -51,12 +50,7 @@ public class CropListener implements Listener {
         }
     }
 
-    /**
-     * Überprüft, ob der gegebene Materialtyp ein erlaubter Crop ist.
-     *
-     * @param material Der zu überprüfende Materialtyp.
-     * @return true, wenn es sich um einen erlaubten Crop handelt, sonst false.
-     */
+    // Überprüft, ob der gegebene Materialtyp ein erlaubter Crop ist.
 
     private boolean isAllowedCrop(final Material material) {
         return switch (material) {
